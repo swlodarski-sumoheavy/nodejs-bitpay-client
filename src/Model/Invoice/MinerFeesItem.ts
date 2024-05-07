@@ -1,5 +1,5 @@
 export interface MinerFeesItem {
-  satoshisPerByte: bigint;
+  satoshisPerByte: number;
   totalFee: bigint;
   fiatAmount: number;
 }
