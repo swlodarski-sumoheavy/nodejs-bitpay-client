@@ -48,7 +48,7 @@ class InvoiceRequests {
     const params = [];
     params['buyerSms'] = '123321312';
 
-    const updatedInvoice = client.updateInvoice('someId', params)
+    const updatedInvoice = await client.updateInvoice('someId', params)
   }
 
   public async cancelInvoice(): Promise<void> {
