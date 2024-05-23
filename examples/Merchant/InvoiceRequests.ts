@@ -45,8 +45,9 @@ class InvoiceRequests {
 
   public async updateInvoice(): Promise<void> {
     const client = ClientProvider.create();
-    const params = [];
-    params['buyerSms'] = '123321312';
+    const params = {
+      buyerSms: '123321312'
+    };
 
     const updatedInvoice = await client.updateInvoice('someId', params)
   }

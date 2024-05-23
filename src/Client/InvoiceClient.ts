@@ -136,7 +136,7 @@ export class InvoiceClient {
    * @throws BitPayApiException BitPayApiException class
    * @throws BitPayGenericException BitPayGenericException class
    */
-  public async update(invoiceId: string, params: []): Promise<InvoiceInterface> {
+  public async update(invoiceId: string, params: object): Promise<InvoiceInterface> {
     params['token'] = this.tokenContainer.getToken(Facade.Merchant);
 
     const result = await this.bitPayClient.put('invoices/' + invoiceId, params);
