@@ -1,11 +1,13 @@
 import {ClientProvider} from "../ClientProvider";
 
 class RateRequests {
-  public getRate(): void {
+  public async getRate(): Promise<void> {
     const client = ClientProvider.create();
 
-    const rate = client.getRate('BTC', 'USD');
+    // Get one rate
+    const rate = await client.getRate('BTC', 'USD');
 
-    const rates = client.getRates('BCH')
+    // Get multiple rates
+    const rates = await client.getRates('BCH')
   }
 }

@@ -1,13 +1,13 @@
 import {ClientProvider} from "../ClientProvider";
 
 class LedgerRequests {
-  public getLedgers(): void {
+  public async getLedgers(): Promise<void> {
     const client = ClientProvider.create();
 
-    const ledgers = client.getLedgers()
+    const ledgers = await client.getLedgers()
   }
 
-  public getLedgerEntries(): void {
+  public async getLedgerEntries(): Promise<void> {
     const client = ClientProvider.create();
 
     const oneMonthAgo = new Date();
@@ -16,6 +16,6 @@ class LedgerRequests {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const ledgerEntries = client.getLedgerEntries('USD', oneMonthAgo, tomorrow)
+    const ledgerEntries = await client.getLedgerEntries('USD', oneMonthAgo, tomorrow)
   }
 }

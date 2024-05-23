@@ -3,7 +3,7 @@ import {Buyer} from "../../src/Model/Invoice/Buyer";
 import {ClientProvider} from "../ClientProvider";
 
 class InvoiceRequests {
-  public createInvoice(): void {
+  public async createInvoice(): Promise<void> {
     const invoice = new Invoice(10.0, 'USD');
     invoice.notificationEmail = 'some@email.com';
     invoice.notificationURL = 'https://some-url.com';
@@ -23,12 +23,12 @@ class InvoiceRequests {
 
     const client = ClientProvider.createPos();
 
-    const createdInvoice = client.createInvoice(invoice);
+    const createdInvoice = await client.createInvoice(invoice);
   }
 
-  public getInvoice(): void {
+  public async getInvoice(): Promise<void> {
     const client = ClientProvider.createPos();
 
-    const invoice = client.getInvoice('myInvoiceId');
+    const invoice = await client.getInvoice('myInvoiceId');
   }
 }

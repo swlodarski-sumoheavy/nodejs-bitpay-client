@@ -3,41 +3,46 @@ import {Payout} from "../../src/Model";
 import {PayoutStatus} from "../../src";
 
 class PayoutRequests {
-  public createPayout(): void {
+  public async createPayout(): Promise<void> {
     const client = ClientProvider.create();
 
     const payout = new Payout(12.34, 'USD', 'USD');
     payout.notificationEmail = 'myEmail@email.com';
     payout.notificationURL = 'https://my-url.com';
 
-    const createdPayout = client.submitPayout(payout);
+    // Submit one payout
+    const createdPayout = await client.submitPayout(payout);
 
-    const payouts = client.submitPayouts([
+    // Submit multiple payouts
+    const payouts = await client.submitPayouts([
       new Payout(12.34, 'USD', 'USD'),
       new Payout(56.14, 'USD', 'USD'),
     ])
   }
 
-  public getPayouts(): void {
+  public async getPayouts(): Promise<void> {
     const client = ClientProvider.create();
 
-    const payout = client.getPayout('myPayoutId')
+    // Get one payout
+    const payout = await client.getPayout('myPayoutId')
 
-    const payouts = client.getPayouts({ status: PayoutStatus.New });
+    // Get payouts by filter
+    const payouts = await client.getPayouts({ status: PayoutStatus.New });
   }
 
-  public cancelPayout(): void {
+  public async cancelPayout(): Promise<void> {
     const client = ClientProvider.create();
 
-    const result = client.cancelPayout('somePayoutId');
+    // Cancel one payout
+    const result = await client.cancelPayout('somePayoutId');
 
-    // const payoutGroupId = payout.groupId;
+    // Cancel payout group
     const cancelledPayouts = client.cancelPayouts('payoutGroupId');
   }
 
-  public requestPayoutWebhookToBeResent(): void {
+  public async requestPayoutWebhookToBeResent(): Promise<void> {
     const client = ClientProvider.create();
 
-    const result = client.requestPayoutNotification('somePayoutId');
+    const result = await client.requestPayoutNotification('somePayoutId');
   }
 }

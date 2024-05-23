@@ -2,36 +2,38 @@ import {ClientProvider} from "../ClientProvider";
 import {PayoutRecipient, PayoutRecipients} from "../../src/Model";
 
 class RecipientRequests {
-  public inviteRecipients(): void {
+  public async inviteRecipients(): Promise<void> {
     const client = ClientProvider.create();
 
     const payoutRecipient = new PayoutRecipient('some@email.com', 'someLabel', 'https://notification.com');
 
     const payoutRecipients = new PayoutRecipients([payoutRecipient]);
 
-    const recipients = client.submitPayoutRecipients(payoutRecipients);
+    const recipients = await client.submitPayoutRecipients(payoutRecipients);
   }
 
-  public getRecipient(): void {
+  public async getRecipient(): Promise<void> {
     const client = ClientProvider.create();
 
-    const recipient = client.getPayoutRecipient('someRecipientId');
+    // Get one payout recipient
+    const recipient = await client.getPayoutRecipient('someRecipientId');
 
-    const recipients = client.getPayoutRecipients('invited');
+    // Get payout recipients by filter
+    const recipients = await client.getPayoutRecipients('invited');
   }
 
-  public updateRecipient(): void {
+  public async updateRecipient(): Promise<void> {
     const client = ClientProvider.create();
 
     const payoutRecipient = new PayoutRecipient('some@email.com', 'someLabel', 'https://notification.com');
     payoutRecipient.label = 'some label';
 
-    const recipient = client.updatePayoutRecipient(payoutRecipient.id, payoutRecipient);
+    const recipient = await client.updatePayoutRecipient(payoutRecipient.id, payoutRecipient);
   }
 
-  public removeRecipient(): void  {
+  public async removeRecipient(): Promise<void>  {
     const client = ClientProvider.create();
 
-    const result = client.deletePayoutRecipient('somePayoutRecipientId');
+    const result = await client.deletePayoutRecipient('somePayoutRecipientId');
   }
 }

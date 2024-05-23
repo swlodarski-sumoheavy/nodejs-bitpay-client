@@ -3,22 +3,22 @@ import {Bill} from "../../src/Model";
 import {Item} from "../../src/Model/Bill/Item";
 
 class BillRequests {
-  public createBill(): void {
+  public async createBill(): Promise<void> {
     const client = ClientProvider.createPos();
 
     const bill = new Bill('someNumber', "USD", "some@email.com", [])
-    client.createBill(bill);
+    await client.createBill(bill);
   }
 
-  public getBill(): void {
+  public async getBill(): Promise<void> {
     const client = ClientProvider.createPos();
 
-    const bill = client.getBill('someBillId');
+    const bill = await client.getBill('someBillId');
   }
 
-  public deliverBillViaEmail(): void {
+  public async deliverBillViaEmail(): Promise<void> {
     const client = ClientProvider.createPos();
 
-    client.deliverBill('someBillId', 'myBillToken');
+    await client.deliverBill('someBillId', 'myBillToken');
   }
 }

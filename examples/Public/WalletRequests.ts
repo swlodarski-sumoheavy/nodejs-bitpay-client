@@ -1,9 +1,9 @@
 import {ClientProvider} from "../ClientProvider";
 
 class WalletRequests {
-  public getSupportedWallets(): void {
+  public async getSupportedWallets(): Promise<void> {
     const client = ClientProvider.create();
 
-    const supportedWallets = client.getSupportedWallets();
+    const supportedWallets = await client.getSupportedWallets();
   }
 }

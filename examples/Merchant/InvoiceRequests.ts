@@ -3,7 +3,7 @@ import {Buyer} from "../../src/Model/Invoice/Buyer";
 import {ClientProvider} from "../ClientProvider";
 
 class InvoiceRequests {
-  public createInvoice(): void {
+  public async createInvoice(): Promise<void> {
     const invoice = new Invoice(10.0, 'USD');
     invoice.notificationEmail = 'some@email.com';
     invoice.notificationURL = 'https://some-url.com';
@@ -23,10 +23,10 @@ class InvoiceRequests {
 
     const client = ClientProvider.create();
 
-    const createdInvoice = client.createInvoice(invoice);
+    const createdInvoice = await client.createInvoice(invoice);
   }
 
-  public getInvoice(): void {
+  public async getInvoice(): Promise<void> {
     const client = ClientProvider.create();
 
     const invoice = client.getInvoice('myInvoiceId');
@@ -40,10 +40,10 @@ class InvoiceRequests {
       limit: null,
       offset: null
     };
-    const invoices = client.getInvoices(params)
+    const invoices = await client.getInvoices(params)
   }
 
-  public updateInvoice(): void {
+  public async updateInvoice(): Promise<void> {
     const client = ClientProvider.create();
     const params = [];
     params['buyerSms'] = '123321312';
@@ -51,17 +51,17 @@ class InvoiceRequests {
     const updatedInvoice = client.updateInvoice('someId', params)
   }
 
-  public cancelInvoice(): void {
+  public async cancelInvoice(): Promise<void> {
     const client = ClientProvider.create();
 
-    client.cancelInvoice('someInvoiceId');
+    await client.cancelInvoice('someInvoiceId');
 
-    client.cancelInvoiceByGuid('someGuid');
+    await client.cancelInvoiceByGuid('someGuid');
   }
 
-  public requestInvoiceWebhookToBeResent(): void {
+  public async requestInvoiceWebhookToBeResent(): Promise<void> {
     const client = ClientProvider.create();
 
-    client.deliverBill('someBillId', 'myBillToken');
+    await client.deliverBill('someBillId', 'myBillToken');
   }
 }
