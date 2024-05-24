@@ -270,7 +270,7 @@ export class Client {
    * autoVerify Skip the user verification on sandbox ONLY.
    * @return A BitPay generated Invoice object.
    */
-  public async updateInvoice(invoiceId: string, params: []): Promise<InvoiceInterface> {
+  public async updateInvoice(invoiceId: string, params: object): Promise<InvoiceInterface> {
     return this.createInvoiceClient().update(invoiceId, params);
   }
 
