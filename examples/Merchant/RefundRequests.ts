@@ -1,48 +1,54 @@
-import {ClientProvider} from "../ClientProvider";
-import {Refund} from "../../src/Model/Invoice/Refund";
+import { ClientProvider } from '../ClientProvider';
+import { Refund } from '../../src/Model/Invoice/Refund';
 
-class RefundRequests {
-  public async createRefund(): Promise<void> {
+export class RefundRequests {
+  public async createRefund() {
     const client = ClientProvider.create();
 
-    const refund = new Refund(12, "someInvoiceId", "someToken");
+    const refund = new Refund(12, 'someInvoiceId', 'someToken');
 
-    const result = await client.createRefund(refund);
+    return await client.createRefund(refund);
   }
 
-  public async updateRefund(): Promise<void> {
+  public async updateRefund() {
     const client = ClientProvider.create();
 
-    // Update a refund by ID
-    const updateRefund = await client.updateRefund('myRefundId','created');
-
-    // Update a refund by GUID
-    const updatedRefundByGuid = await client.updateRefundByGuid('myRefundId','created');
+    return await client.updateRefund('myRefundId', 'created');
   }
 
-  public async getRefund(): Promise<void> {
+  public async updateRefundByGuid() {
     const client = ClientProvider.create();
 
-    // Get a refund by ID
-    const refund = await client.getRefund('someRefundId');
-
-    // Get a refund by GUID
-    const refundByGuid = await client.getRefundByGuid('someGuid');
+    return await client.updateRefundByGuid('myRefundGuid', 'created');
   }
 
-  public async cancelRefund(): Promise<void> {
+  public async getRefund() {
     const client = ClientProvider.create();
 
-    // Cancel a refund by ID
-    const cancelRefund = await client.cancelRefund('myRefundId');
-
-    // Cancel a refund by GUID
-    const cancelRefundByGuid = await client.cancelRefundByGuid('someGuid');
+    return await client.getRefund('someRefundId');
   }
 
-  public async requestRefundNotificationToBeResent(): Promise<void> {
+  public async getRefundByGuid() {
     const client = ClientProvider.create();
 
-    const result = await client.sendRefundNotification('someRefundId');
+    await client.getRefundByGuid('someGuid');
+  }
+
+  public async cancelRefund() {
+    const client = ClientProvider.create();
+
+    return await client.cancelRefund('myRefundId');
+  }
+
+  public async cancleRefundByGuid() {
+    const client = ClientProvider.create();
+
+    return await client.cancelRefundByGuid('someGuid');
+  }
+
+  public async requestRefundNotificationToBeResent() {
+    const client = ClientProvider.create();
+
+    return await client.sendRefundNotification('someRefundId');
   }
 }

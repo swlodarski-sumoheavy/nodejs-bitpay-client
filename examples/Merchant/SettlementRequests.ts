@@ -1,14 +1,16 @@
-import {ClientProvider} from "../ClientProvider";
-import {Settlement} from "../../src/Model/Settlement/Settlement";
+import { ClientProvider } from '../ClientProvider';
+import { Settlement } from '../../src/Model/Settlement/Settlement';
 
-class SettlementRequests {
-  public async getSettlement(): Promise<void> {
+export class SettlementRequests {
+  public async getSettlement() {
     const client = ClientProvider.create();
 
-    // Get one settlement
-    const settlement = await client.getSettlement('someSettlementId');
+    return await client.getSettlement('someSettlementId');
+  }
 
-    // Get settlements by filter
+  public async getSettlementsByFilters() {
+    const client = ClientProvider.create();
+
     const params = {
       startDate: '2021-05-10',
       endDate: '2021-05-12',
@@ -16,14 +18,16 @@ class SettlementRequests {
       limit: 100,
       offset: 0
     };
-    const settlements = await client.getSettlements(params)
+
+    return await client.getSettlements(params);
   }
 
-  public async fetchReconciliationReport(): Promise<void> {
+  public async fetchReconciliationReport() {
     const client = ClientProvider.create();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const settlement = new Settlement();
 
-    const result = await client.getSettlementReconciliationReport('settlementId', 'settlementToken');
+    return await client.getSettlementReconciliationReport('settlementId', 'settlementToken');
   }
 }

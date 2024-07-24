@@ -1,13 +1,14 @@
-import {ClientProvider} from "../ClientProvider";
+import { ClientProvider } from '../ClientProvider';
+import { LedgerEntryInterface, LedgerInterface } from '../../src/Model';
 
-class LedgerRequests {
-  public async getLedgers(): Promise<void> {
+export class LedgerRequests {
+  public async getLedgers(): Promise<LedgerInterface[]> {
     const client = ClientProvider.create();
 
-    const ledgers = await client.getLedgers()
+    return await client.getLedgers();
   }
 
-  public async getLedgerEntries(): Promise<void> {
+  public async getLedgerEntries(): Promise<LedgerEntryInterface[]> {
     const client = ClientProvider.create();
 
     const oneMonthAgo = new Date();
@@ -16,6 +17,6 @@ class LedgerRequests {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const ledgerEntries = await client.getLedgerEntries('USD', oneMonthAgo, tomorrow)
+    return await client.getLedgerEntries('USD', oneMonthAgo, tomorrow);
   }
 }
