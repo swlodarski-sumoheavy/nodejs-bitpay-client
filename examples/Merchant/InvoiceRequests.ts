@@ -1,35 +1,38 @@
-import {Invoice} from "../../src/Model";
-import {Buyer} from "../../src/Model/Invoice/Buyer";
-import {ClientProvider} from "../ClientProvider";
+import { Invoice } from '../../src/Model';
+import { Buyer } from '../../src/Model/Invoice/Buyer';
+import { ClientProvider } from '../ClientProvider';
 
-class InvoiceRequests {
-  public async createInvoice(): Promise<void> {
+export class InvoiceRequests {
+  public async createInvoice() {
     const invoice = new Invoice(10.0, 'USD');
     invoice.notificationEmail = 'some@email.com';
     invoice.notificationURL = 'https://some-url.com';
 
     const buyer = new Buyer();
-    buyer.name = "Test";
-    buyer.email = "test@email.com";
-    buyer.address1 = "168 General Grove";
-    buyer.country = "AD";
-    buyer.locality = "Port Horizon";
+    buyer.name = 'Test';
+    buyer.email = 'test@email.com';
+    buyer.address1 = '168 General Grove';
+    buyer.country = 'AD';
+    buyer.locality = 'Port Horizon';
     buyer.notify = true;
-    buyer.phone = "+990123456789";
-    buyer.postalCode = "KY7 1TH";
-    buyer.region = "New Port";
+    buyer.phone = '+990123456789';
+    buyer.postalCode = 'KY7 1TH';
+    buyer.region = 'New Port';
 
-    invoice.buyer = buyer
+    invoice.buyer = buyer;
 
     const client = ClientProvider.create();
 
-    const createdInvoice = await client.createInvoice(invoice);
+    return await client.createInvoice(invoice);
   }
 
-  public async getInvoice(): Promise<void> {
+  public async getInvoice() {
     const client = ClientProvider.create();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const invoice = client.getInvoice('myInvoiceId');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const invoiceByGuid = client.getInvoiceByGuid('invoiceGuid'); // we can add a GUID during the invoice creation
 
     const params = {
@@ -40,19 +43,20 @@ class InvoiceRequests {
       limit: null,
       offset: null
     };
-    const invoices = await client.getInvoices(params)
+
+    return await client.getInvoices(params);
   }
 
-  public async updateInvoice(): Promise<void> {
+  public async updateInvoice() {
     const client = ClientProvider.create();
     const params = {
       buyerSms: '123321312'
     };
 
-    const updatedInvoice = await client.updateInvoice('someId', params)
+    return await client.updateInvoice('someId', params);
   }
 
-  public async cancelInvoice(): Promise<void> {
+  public async cancelInvoice() {
     const client = ClientProvider.create();
 
     await client.cancelInvoice('someInvoiceId');
@@ -60,9 +64,9 @@ class InvoiceRequests {
     await client.cancelInvoiceByGuid('someGuid');
   }
 
-  public async requestInvoiceWebhookToBeResent(): Promise<void> {
+  public async requestInvoiceWebhookToBeResent() {
     const client = ClientProvider.create();
 
-    await client.deliverBill('someBillId', 'myBillToken');
+    return await client.deliverBill('someBillId', 'myBillToken');
   }
 }

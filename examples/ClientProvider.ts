@@ -1,4 +1,4 @@
-import {Client} from "../src";
+import { Client } from '../src';
 
 export class ClientProvider {
   static create(): Client {

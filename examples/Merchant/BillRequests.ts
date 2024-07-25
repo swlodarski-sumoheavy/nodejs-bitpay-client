@@ -1,43 +1,44 @@
-import {ClientProvider} from "../ClientProvider";
-import {Bill} from "../../src/Model";
-import {Item} from "../../src/Model/Bill/Item";
+import { ClientProvider } from '../ClientProvider';
+import { Bill } from '../../src/Model';
+import { Item } from '../../src/Model/Bill/Item';
 
-class BillRequests {
-  public async createBill(): Promise<void> {
+export class BillRequests {
+  public async createBill() {
     const client = ClientProvider.create();
 
-    const bill = new Bill('someNumber', "USD", "some@email.com", [])
-    await client.createBill(bill);
+    const bill = new Bill('someNumber', 'USD', 'some@email.com', []);
+    return client.createBill(bill);
   }
 
-  public async getBill(): Promise<void> {
+  public async getBill() {
     const client = ClientProvider.create();
 
-    // Get one bill
-    const bill = await client.getBill('someBillId');
-
-    // Get bills by status
-    const bills = await client.getBills('draft');
+    return await client.getBill('someBillId');
   }
 
-  public async updateBill(): Promise<void> {
+  public async getBills() {
+    const client = ClientProvider.create();
+    return await client.getBills('draft');
+  }
+
+  public async updateBill() {
     const client = ClientProvider.create();
 
-    const item = new Item()
+    const item = new Item();
     item.price = 12.34;
     item.quantity = 2;
     item.description = 'someDescription';
 
-    const bill = new Bill('someNumber', "USD", "some@email.com", []);
+    const bill = new Bill('someNumber', 'USD', 'some@email.com', []);
 
     if (bill.id) {
-      await client.updateBill(bill, bill.id)
+      await client.updateBill(bill, bill.id);
     }
   }
 
-  public async deliverBillViaEmail(): Promise<void> {
+  public async deliverBillViaEmail() {
     const client = ClientProvider.create();
 
-    await client.deliverBill('someBillId', 'myBillToken');
+    return await client.deliverBill('someBillId', 'myBillToken');
   }
 }

@@ -1,39 +1,41 @@
-import {ClientProvider} from "../ClientProvider";
-import {PayoutRecipient, PayoutRecipients} from "../../src/Model";
+import { ClientProvider } from '../ClientProvider';
+import { PayoutRecipient, PayoutRecipients } from '../../src/Model';
 
-class RecipientRequests {
-  public async inviteRecipients(): Promise<void> {
+export class RecipientRequests {
+  public async inviteRecipients() {
     const client = ClientProvider.create();
 
     const payoutRecipient = new PayoutRecipient('some@email.com', 'someLabel', 'https://notification.com');
 
     const payoutRecipients = new PayoutRecipients([payoutRecipient]);
 
-    const recipients = await client.submitPayoutRecipients(payoutRecipients);
+    return await client.submitPayoutRecipients(payoutRecipients);
   }
 
-  public async getRecipient(): Promise<void> {
+  public async getRecipient() {
     const client = ClientProvider.create();
 
-    // Get one payout recipient
-    const recipient = await client.getPayoutRecipient('someRecipientId');
-
-    // Get payout recipients by filter
-    const recipients = await client.getPayoutRecipients('invited');
+    return await client.getPayoutRecipient('someRecipientId');
   }
 
-  public async updateRecipient(): Promise<void> {
+  public async getRecipientsByFillter() {
+    const client = ClientProvider.create();
+
+    return await client.getPayoutRecipients('invited');
+  }
+
+  public async updateRecipient() {
     const client = ClientProvider.create();
 
     const payoutRecipient = new PayoutRecipient('some@email.com', 'someLabel', 'https://notification.com');
     payoutRecipient.label = 'some label';
 
-    const recipient = await client.updatePayoutRecipient(payoutRecipient.id, payoutRecipient);
+    return await client.updatePayoutRecipient(payoutRecipient.id!, payoutRecipient);
   }
 
-  public async removeRecipient(): Promise<void>  {
+  public async removeRecipient() {
     const client = ClientProvider.create();
 
-    const result = await client.deletePayoutRecipient('somePayoutRecipientId');
+    return await client.deletePayoutRecipient('somePayoutRecipientId');
   }
 }

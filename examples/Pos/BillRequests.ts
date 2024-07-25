@@ -1,24 +1,23 @@
-import {ClientProvider} from "../ClientProvider";
-import {Bill} from "../../src/Model";
-import {Item} from "../../src/Model/Bill/Item";
+import { ClientProvider } from '../ClientProvider';
+import { Bill } from '../../src/Model';
 
-class BillRequests {
-  public async createBill(): Promise<void> {
+export class BillRequests {
+  public async createBill() {
     const client = ClientProvider.createPos();
 
-    const bill = new Bill('someNumber', "USD", "some@email.com", [])
-    await client.createBill(bill);
+    const bill = new Bill('someNumber', 'USD', 'some@email.com', []);
+    return await client.createBill(bill);
   }
 
-  public async getBill(): Promise<void> {
+  public async getBill() {
     const client = ClientProvider.createPos();
 
-    const bill = await client.getBill('someBillId');
+    return await client.getBill('someBillId');
   }
 
-  public async deliverBillViaEmail(): Promise<void> {
+  public async deliverBillViaEmail() {
     const client = ClientProvider.createPos();
 
-    await client.deliverBill('someBillId', 'myBillToken');
+    return client.deliverBill('someBillId', 'myBillToken');
   }
 }
