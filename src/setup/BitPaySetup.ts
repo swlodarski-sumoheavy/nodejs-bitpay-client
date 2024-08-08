@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 import * as fs from 'fs';
 import * as BitPaySDK from '../index';
 import * as readline from 'readline';
