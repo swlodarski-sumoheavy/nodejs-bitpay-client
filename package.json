@@ -44,7 +44,7 @@
   "homepage": "https://github.com/bitpay/nodejs-bitpay-client#readme",
   "dependencies": {
     "bs58": "4.0.1",
-    "elliptic": "6.5.6",
+    "elliptic": "6.5.7",
     "lodash": "4.17.21",
     "zod": "3.23.8"
   },
