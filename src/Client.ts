@@ -53,6 +53,7 @@ export class Client {
     tokenContainer: TokenContainer | null,
     posToken: PosToken | null,
     environment?: Environment,
+    platformInfo?: string,
     bitPayClient?: BitPayClient, // using for tests
     guidGenerator?: GuidGenerator // using for tests
   ) {
@@ -82,13 +83,18 @@ export class Client {
       const ecKey = this.getEcKeyByPrivateKey(privateKey);
       this.guidGenerator = new GuidGenerator();
       this.tokenContainer = tokenContainer;
-      this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
+      this.bitPayClient = new BitPayClient(
+        Client.getBaseUrl(environment),
+        ecKey,
+        this.getIdentity(ecKey),
+        platformInfo
+      );
       return;
     }
 
     this.tokenContainer = tokenContainer;
     this.guidGenerator = new GuidGenerator();
-    this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), null, null);
+    this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), null, null, platformInfo);
 
     if (posToken !== null) {
       this.tokenContainer.addPos(posToken.getValue());
@@ -101,8 +107,8 @@ export class Client {
    * @param posToken
    * @param environment
    */
-  public static createPosClient(posToken: string, environment?: Environment): Client {
-    return new Client(null, null, null, new PosToken(posToken), environment);
+  public static createPosClient(posToken: string, environment?: Environment, platformInfo?: string): Client {
+    return new Client(null, null, null, new PosToken(posToken), environment, platformInfo);
   }
 
   /**
@@ -110,8 +116,8 @@ export class Client {
    *
    * @param configFilePath
    */
-  public static createClientByConfig(configFilePath: string): Client {
-    return new Client(configFilePath, null, null, null);
+  public static createClientByConfig(configFilePath: string, platformInfo?: string): Client {
+    return new Client(configFilePath, null, null, null, undefined, platformInfo);
   }
 
   /**
@@ -123,9 +129,10 @@ export class Client {
   public static createClientByPrivateKey(
     privateKey: string,
     tokenContainer: TokenContainer,
-    environment?: Environment
+    environment?: Environment,
+    platformInfo?: string
   ) {
-    return new Client(null, new PrivateKey(privateKey), tokenContainer, null, environment);
+    return new Client(null, new PrivateKey(privateKey), tokenContainer, null, environment, platformInfo);
   }
 
   public getToken(facade: Facade) {
@@ -811,7 +818,7 @@ export class Client {
     return date.toISOString().split('T')[0];
   }
 
-  private initByConfigFilePath(configFilePath: string): void {
+  private initByConfigFilePath(configFilePath: string, platformInfo?: string): void {
     if (!fs.existsSync(configFilePath)) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Configuration file not found');
     }
@@ -823,7 +830,12 @@ export class Client {
       const tokens = envConfig['ApiTokens'];
       this.tokenContainer = new TokenContainer(tokens);
       const ecKey = this.getEcKeyByConfig(envConfig);
-      this.bitPayClient = new BitPayClient(Client.getBaseUrl(environment), ecKey, this.getIdentity(ecKey));
+      this.bitPayClient = new BitPayClient(
+        Client.getBaseUrl(environment),
+        ecKey,
+        this.getIdentity(ecKey),
+        platformInfo
+      );
       this.guidGenerator = new GuidGenerator();
     } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Error when reading configuration file');

@@ -128,7 +128,7 @@ describe('BitPaySDK.Client', () => {
       return exampleUuid;
     });
 
-    client = new Client(null, null, tokenContainer, null, undefined, bpc, guidGenerator);
+    client = new Client(null, null, tokenContainer, null, undefined, undefined, bpc, guidGenerator);
     oneMonthAgo = new Date();
     oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
 
@@ -184,6 +184,13 @@ describe('BitPaySDK.Client', () => {
       expect(client.getToken(Facade.Pos)).toBe(posTokenValue);
     });
 
+    it('should create POS client with x-bitpay-platform-info header', async () => {
+      const posTokenValue = 'posToken';
+      const client = Client.createPosClient(posTokenValue, undefined, 'MyPlatform_v1.0.0');
+
+      expect(client.getToken(Facade.Pos)).toBe(posTokenValue);
+    });
+
     it('should create client by private key', async () => {
       const tokenContainer = new TokenContainer();
       const token = 'anotherMerchantToken';
@@ -197,8 +204,28 @@ describe('BitPaySDK.Client', () => {
       expect(client.getToken(Facade.Merchant)).toBe(token);
     });
 
+    it('should create client by private key with x-bitpay-platform-info header', async () => {
+      const tokenContainer = new TokenContainer();
+      const token = 'anotherMerchantToken';
+      tokenContainer.addMerchant(token);
+
+      const client = Client.createClientByPrivateKey(
+        '9ee267c293e74c12bf4035746834ad4f5690d546d7d10e15c92fc83043552186',
+        tokenContainer,
+        undefined,
+        'MyPlatform_v1.0.0'
+      );
+
+      expect(client.getToken(Facade.Merchant)).toBe(token);
+    });
+
     it('should create client by config file', async () => {
       const client = Client.createClientByConfig(__dirname + '/BitPayUnit.config.json');
+      expect(client.getToken(Facade.Pos)).toBe('somePosToken');
+    });
+
+    it('should create client by config file with x-bitpay-platform-info header', async () => {
+      const client = Client.createClientByConfig(__dirname + '/BitPayUnit.config.json', 'MyPlatform_v1.0.0');
       expect(client.getToken(Facade.Pos)).toBe('somePosToken');
     });
   });
@@ -215,6 +242,7 @@ describe('BitPaySDK.Client', () => {
       null,
       tokenContainer,
       null,
+      undefined,
       undefined,
       new BitPayClient(host + '/', ecKey, 'someIdentity')
     );

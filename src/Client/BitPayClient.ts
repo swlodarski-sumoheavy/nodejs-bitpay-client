@@ -16,7 +16,7 @@ export class BitPayClient {
   private readonly keyUtils: KeyUtils;
   private readonly responseParser: BitPayResponseParser;
 
-  public constructor(baseUrl: string, ecKey: KeyPair | null, identity: string | null) {
+  public constructor(baseUrl: string, ecKey: KeyPair | null, identity: string | null, platformInfo?: string) {
     this.ecKey = ecKey;
     this.baseUrl = baseUrl;
     this.identity = identity;
@@ -27,6 +27,9 @@ export class BitPayClient {
       'x-bitpay-api-frame-version': Env.BitpayApiFrameVersion,
       'Content-Type': 'application/json'
     };
+    if (platformInfo) {
+      this.defaultHeaders['x-bitpay-platform-info'] = platformInfo;
+    }
     this.keyUtils = new KeyUtils();
     this.responseParser = new BitPayResponseParser();
   }
