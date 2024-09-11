@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Env, KeyUtils } from '../index';
 import { ec } from 'elliptic';
 import KeyPair = ec.KeyPair;

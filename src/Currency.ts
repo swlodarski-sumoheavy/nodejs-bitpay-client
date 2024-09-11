@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars*/
 export class Currency {
   // Crypto
   static BCH = 'BCH';

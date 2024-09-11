@@ -1,5 +1,5 @@
 import * as elliptic from 'elliptic';
-import * as bs58 from 'bs58';
+import bs58 from 'bs58';
 import * as crypto from 'crypto';
 
 const ec = new elliptic.ec('secp256k1');
