@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars*/
+
 import { ec } from 'elliptic';
 import { Env, Facade, KeyUtils } from './index';
 import {
