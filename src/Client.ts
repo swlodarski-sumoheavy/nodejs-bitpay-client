@@ -837,6 +837,7 @@ export class Client {
         platformInfo
       );
       this.guidGenerator = new GuidGenerator();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e: any) {
       BitPayExceptionProvider.throwGenericExceptionWithMessage('Error when reading configuration file');
     }

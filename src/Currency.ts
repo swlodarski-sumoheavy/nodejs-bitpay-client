@@ -181,6 +181,7 @@ export class Currency {
   static isValid(value) {
     try {
       return this.hasOwnProperty.call(this, value);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (ex) {
       return false;
     }
