@@ -1,6 +1,6 @@
 {
   "name": "bitpay-sdk",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "Complete version of the NodeJS library for the new cryptographically secure BitPay API",
   "engines": {
     "node": ">=18.0.0 <23.0.0"
@@ -44,7 +44,7 @@
   "homepage": "https://github.com/bitpay/nodejs-bitpay-client#readme",
   "dependencies": {
     "bs58": "6.0.0",
-    "elliptic": "6.5.7",
+    "elliptic": "6.6.0",
     "lodash": "4.17.21",
     "zod": "3.23.8"
   },
@@ -62,7 +62,7 @@
     "husky": "9.1.6",
     "i": "0.3.7",
     "jest": "29.7.0",
-    "msw": "2.4.7",
+    "msw": "2.5.2",
     "npm": "10.8.3",
     "prettier": "3.3.3",
     "rimraf": "5.0.9",
