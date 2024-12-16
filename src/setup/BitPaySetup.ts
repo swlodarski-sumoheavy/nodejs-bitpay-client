@@ -2,9 +2,8 @@ import * as fs from 'fs';
 import * as BitPaySDK from '../index';
 import * as readline from 'readline';
 
-const privateKeyPath = __dirname + '/../secure/private_key';
-const ConfFilePath = __dirname + '/../secure/BitPay.config.json';
 const keyUtils = new BitPaySDK.KeyUtils();
+let configFilePath = process.cwd();
 let keyPair;
 let ecKey;
 let environment;
@@ -58,10 +57,9 @@ const setEnv = async (env) => {
 };
 const selectCreateKey = async () => {
   try {
-    console.log('Enter your private key or its location');
-    rl.question('Or press Enter to generate a brand new key: ', async (answer) => {
+    rl.question('Press (E) for existing or (N) for new private key: ', async (answer) => {
       switch (answer.toLowerCase()) {
-        case '':
+        case 'n':
           await createNewKey();
           break;
         default:
@@ -81,7 +79,7 @@ const createNewKey = async () => {
     await sleep(2000);
     console.log('Generated Private Key: ' + ecKey.getPrivate('hex'));
     console.log('With Public Key: ' + ecKey.getPublic('hex') + '\n');
-    await storeKey();
+    await prepareDirectory();
   } catch (e) {
     console.log(e);
   }
@@ -111,48 +109,81 @@ const loadKey = async (privateKey) => {
     console.log(e);
   }
 };
-const storeKey = async () => {
-  try {
-    if (!fs.existsSync(__dirname + '/../secure')) {
-      fs.mkdirSync(__dirname + '/../secure');
-    }
-    console.log('Select the way you want to store your private key:');
-    rl.question('Press F for storing in a text file or T for plain text in your config file: ', async (answer) => {
-      switch (answer.toLowerCase()) {
-        case 'f':
-          storeFile = true;
-          keyPath = privateKeyPath + '_' + environment.toLowerCase() + '.key';
 
-          console.log('Saving private key... \n');
-          sleep(500);
-          fs.writeFile(
-            privateKeyPath + '_' + environment.toLowerCase() + '.key',
-            ecKey.getPrivate('hex'),
-            { mode: 0o755 },
-            function (err) {
-              if (err) throw err;
-              console.log('Private key saved in file: ' + keyPath + '\n');
-            }
-          );
-          await sleep(1000);
-
-          selectTokens();
-          break;
-        case 't':
-          storeFile = false;
-          keyPlain = ecKey.getPrivate('hex');
-          console.log('Saving private key... \n');
-          await sleep(1000);
-
-          selectTokens();
-          break;
-        default:
-          storeKey();
-      }
-    });
-  } catch (e) {
-    console.log(e);
+const formatDirecotryPath = (dir: string) => {
+  if (dir === '' || dir === '.' || dir === '/' || !dir) {
+    return process.cwd();
   }
+
+  if (dir && dir.charAt(0) !== '/') {
+    return process.cwd() + `/${dir}`;
+  } else {
+    return process.cwd() + dir;
+  }
+};
+
+const prepareDirectory = async () => {
+  rl.question('Enter the directory for your new private key: ', async (dir) => {
+    configFilePath = formatDirecotryPath(dir);
+
+    try {
+      if (!fs.existsSync(configFilePath)) {
+        console.error(`Directory ${configFilePath} does not exist.`);
+        console.log(`Do you want to create ${configFilePath} ?`);
+        rl.question(`Press (Y) to create or (N) to cancel process: `, async (answer) => {
+          switch (answer.toLowerCase()) {
+            case 'n':
+              rl.close();
+              break;
+            default:
+              fs.mkdirSync(configFilePath);
+              await storeKey();
+          }
+        });
+      } else {
+        await storeKey();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
+
+const storeKey = async () => {
+  console.log('Select the way you want to store your private key:');
+  rl.question('Press F for storing in a text file or T for plain text in your config file: ', async (answer) => {
+    switch (answer.toLowerCase()) {
+      case 'f':
+        storeFile = true;
+
+        if (configFilePath.charAt(configFilePath.length - 1) !== '/') {
+          keyPath = configFilePath + '/private_key' + '_' + environment.toLowerCase() + '.key';
+        } else {
+          keyPath = configFilePath + 'private_key' + '_' + environment.toLowerCase() + '.key';
+        }
+
+        console.log('Saving private key... \n');
+        sleep(500);
+        fs.writeFile(keyPath, ecKey.getPrivate('hex'), { mode: 0o755 }, function (err) {
+          if (err) throw err;
+          console.log('Private key saved in file: ' + keyPath + '\n');
+        });
+        await sleep(1000);
+
+        selectTokens();
+        break;
+      case 't':
+        storeFile = false;
+        keyPlain = ecKey.getPrivate('hex');
+        console.log('Saving private key... \n');
+        await sleep(1000);
+
+        selectTokens();
+        break;
+      default:
+        prepareDirectory();
+    }
+  });
 };
 const selectTokens = async () => {
   try {
@@ -291,10 +322,10 @@ const updateConfigFile = async () => {
     }
   };
 
-  fs.writeFile(ConfFilePath, JSON.stringify(configurationObject, null, 4), function (err) {
+  fs.writeFile(configFilePath + '/BitPay.config.json', JSON.stringify(configurationObject, null, 4), function (err) {
     if (err) throw err;
     console.log('Generated configuration file');
-    console.log('And saved in file: ' + ConfFilePath + '\n');
+    console.log('And saved in file: ' + configFilePath + '/BitPay.config.json' + '\n');
   });
   await sleep(5000);
 
